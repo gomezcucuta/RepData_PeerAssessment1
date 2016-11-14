@@ -28,8 +28,6 @@ library(lubridate)
 
 activity$date <- ymd(activity$date)
 
-str(activity)
-
 head(activity); tail(activity)
 ```
 
@@ -46,7 +44,7 @@ total_steps
 
 # Make a histogram of the total number of steps taken each day.
 
-hist(total_steps, main = "Histogram of the Total Number of Steps Taken each Day", xlab = "Total number of steps taken each day")
+hist(total_steps, main = "Histogram of the Total Number of Steps", xlab = "Total number of steps taken each day", las = 1)
 
 # Calculate and report the mean and the median of the total number of steps taken per day.
 
@@ -60,15 +58,11 @@ summary(total_steps)
 
 average_steps <- round(tapply(steps, interval, mean, na.rm = TRUE), digits = 2)
 
-average_steps
-
 interval.f <- activity$interval
 
 interval.f <- unique(interval.f)
 
-interval.f
-
-plot(interval.f, average_steps, type = "l", main = "Time Series Plot", xlab = "5-minute interval", ylab = "Average number of steps")
+plot(interval.f, average_steps, type = "l", main = "Time Series Plot", xlab = "5-minute interval", ylab = "Average number of steps", las = 1)
 
 # Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -92,11 +86,7 @@ sum(is.na(steps))
 
 detach(activity)
 
-activity[!complete.cases(activity),]
-
 activity[is.na(activity)] <- round(average_steps, 0)
-
-head(activity); tail(activity)
 
 # Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
@@ -112,9 +102,7 @@ attach(activity2)
 
 total_steps2 <- tapply(steps, date, sum)
 
-total_steps2
-
-hist(total_steps2, main = "Histogram of the New Total Number of Steps Taken each Day", xlab = "New Total number of steps taken each day")
+hist(total_steps2, main = "Histogram of the New Total Number of Steps", xlab = "New Total number of steps taken each day", las = 1)
 
 summary(total_steps2)
 
@@ -136,8 +124,6 @@ The impact was noticeable for the mean.
 
 activity2$date <- weekdays(activity2$date)
 
-head(activity2); tail(activity2)
-
 activity2$date2[activity2$date == "Monday"] <- "weekday"
 
 activity2$date2[activity2$date == "Tuesday"] <- "weekday"
@@ -152,8 +138,6 @@ activity2$date2[activity2$date == "Saturday"] <- "weekend"
     
 activity2$date2[activity2$date == "Sunday"] <- "weekend"
 
-table(activity2$date2)
-
 str(activity2$date2)
 
 activity2$date2 <- factor(activity2$date2)
@@ -164,31 +148,19 @@ str(activity2$date2)
 
 weekday <- activity2[activity2$date2 == "weekday", ]
 
-str(weekday)
-
 weekday_average_steps <- round(tapply(weekday$steps, weekday$interval, mean), digits = 2)
-
-weekday_average_steps
 
 weekend <- activity2[activity2$date2 == "weekend", ]
 
-str(weekend)
-
 weekend_average_steps <- round(tapply(weekend$steps, weekend$interval, mean), digits = 2)
 
-weekend_average_steps
+par(mfrow = c(2,1), oma = c(1, 1, 2, 1))
 
-png(filename = "plot.png")
+plot(interval.f, weekday_average_steps, type = "l", xlab = "5-minute interval", ylab = "Average number of steps", main = "weekdays", las = 1)
 
-par(mfrow = c(2,1))
+plot(interval.f, weekend_average_steps, type = "l", xlab = "5-minute interval", ylab = "Average number of steps", main = "weekends", las = 1)
 
-plot(interval.f, weekday_average_steps, type = "l", xlab = "5-minute interval", ylab = "Average number of steps", main = "weekdays")
-
-plot(interval.f, weekend_average_steps, type = "l", xlab = "5-minute interval", ylab = "Average number of steps", main = "weekends")
-
-dev.off()
+mtext("Time Series Plot by Weekdays and Weekends", outer = TRUE, cex = 1.5)
 ```
-
-![Time Series Plot by weekdays and weekends](/Users/Henry/Dropbox/Education/JHU/Data Sience Specialization/5. Reproducible Research/wd_for_rr/plot.png)
 
 **Conclusion:** Yes, there are some differences in activity patterns between weekdays and weekends.
