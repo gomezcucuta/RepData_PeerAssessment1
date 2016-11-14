@@ -1,5 +1,5 @@
 ---
-title: "activity"
+title: "Peer-graded Assignment: Course Project 1"
 author: "Giovanna Gomez"
 date: "11/13/2016"
 output: html_document
